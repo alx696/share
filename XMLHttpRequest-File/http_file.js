@@ -14,22 +14,26 @@ class HttpFile {
 
   /**
    * 上传
-   * @param file File
-   * @param name [可选]自定义名称
+   * @param blob File或Blob
+   * @param name [blob参数为File时可选]自定义名称(blob参数为Blob时必须设置,且要带上文件类型,如.ogg)
    * @returns {Promise<any>} 文件id
    */
-  upload(file, name) {
+  upload(blob, name) {
     let uri = this.uri;
 
     return new Promise(
         (resolve, reject) => {
-          if (!name) {
-            name = file.name;
+          if (blob instanceof Blob && (!name || name.indexOf('.') === -1)) {
+            reject('blob参数为Blob时必须设置name参数,且要带上文件类型,如.ogg');
+            return;
           }
-          console.debug('上传文件', file, name);
+          if (blob instanceof File && !name) {
+            name = blob.name;
+          }
+          console.debug('上传文件', blob, name);
 
           let formData = new FormData();
-          formData.append("file", file);
+          formData.append("file", blob, name);
           formData.append("name", name);
 
           let xhr = new XMLHttpRequest();
