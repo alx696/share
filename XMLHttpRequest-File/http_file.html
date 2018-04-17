@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>XMLHttpRequest文件</title>
+  <script src="http_file.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let fileInput = document.querySelector('input[name="file"]');
+      let uploadButton = document.querySelector('#uploadButton');
+      let downloadButton = document.querySelector('#downloadButton');
+      let httpFile = new HttpFile();
+
+      let testFileId;
+
+      uploadButton.addEventListener('click', () => {
+        let file = fileInput.files[0];
+
+        httpFile.upload(file, null)
+            .then(id => {
+              console.info('上传完毕:', id);
+              testFileId = id;
+            })
+            .catch(error => {
+              console.error(error);
+            });
+      });
+
+      downloadButton.addEventListener('click', () => {
+        let div = document.createElement('div');
+        div.setAttribute('style', `
+            position: absolute;
+            top: 1vw;
+            left: 50%;
+            z-index: 200;
+            width: 16vw;
+            margin-left: -4.5vw;
+            text-align: center;
+            border: 0.05vw solid #CCCCCC;
+            background-color: #EEEEEE;
+            color: gray;
+          `);
+        document.body.appendChild(div);
+
+        let onProgress = function (percentComplete) {
+          console.info('已下比例:', percentComplete);
+          div.innerText = '已经下载' + (percentComplete * 100).toFixed(0) + '%';
+        };
+
+        httpFile.download(testFileId, onProgress)
+            .then(() => {
+              console.info('下载完毕');
+              div.remove();
+            });
+      });
+    });
+  </script>
+</head>
+<body>
+<p>
+  <input name="file" type="file">
+  <button id="uploadButton">上传</button>
+  <button id="downloadButton">下载</button>
+</p>
+</body>
+</html>
