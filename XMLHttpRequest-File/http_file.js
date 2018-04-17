@@ -5,12 +5,22 @@
  */
 class HttpFile {
   /**
+   * 创建
+   * @param uri 服务地址
+   */
+  constructor(uri) {
+    this.uri = uri;
+  }
+
+  /**
    * 上传
    * @param file File
    * @param name [可选]自定义名称
    * @returns {Promise<any>} 文件id
    */
   upload(file, name) {
+    let uri = this.uri;
+
     return new Promise(
         (resolve, reject) => {
           if (!name) {
@@ -23,7 +33,7 @@ class HttpFile {
           formData.append("name", name);
 
           let xhr = new XMLHttpRequest();
-          xhr.open('POST', 'http://localhost:6001/file/');
+          xhr.open('POST', uri);
           xhr.addEventListener('error', () => {
             reject('错误');
           });
@@ -48,12 +58,22 @@ class HttpFile {
   }
 
   /**
+   * 获取文件url
+   * @returns {*}
+   */
+  getUrl(fileId) {
+    return this.uri + fileId;
+  }
+
+  /**
    * 下载
    * @param fileId 文件id
    * @param onProgress [可选]下载进度(0.0-1的小数)
    * @returns {Promise<any>}
    */
   download(fileId, onProgress) {
+    let uri = this.uri;
+
     return new Promise(
         (resolve, reject) => {
           console.debug('下载文件', fileId);
@@ -71,7 +91,7 @@ class HttpFile {
               }
             }
           });
-          xhr.open('GET', 'http://localhost:6001/file/' + fileId);
+          xhr.open('GET', uri + fileId);
           xhr.responseType = 'blob';
           xhr.addEventListener('load', () => {
             if (xhr.readyState === 4 && xhr.status === 200) {
