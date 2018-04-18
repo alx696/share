@@ -23,11 +23,11 @@ class HttpFile {
 
     return new Promise(
         (resolve, reject) => {
-          if (blob instanceof Blob && (!name || name.indexOf('.') === -1)) {
+          if (!blob.name && (!name || name.indexOf('.') === -1)) {
             reject('blob参数为Blob时必须设置name参数,且要带上文件类型,如.ogg');
             return;
           }
-          if (blob instanceof File && !name) {
+          if (blob.name && !name) {
             name = blob.name;
           }
           console.debug('上传文件', blob, name);
@@ -105,7 +105,7 @@ class HttpFile {
 
               let a = document.createElement('a');
               a.setAttribute('href', blobUrl);
-              a.setAttribute('download', filename);
+              a.setAttribute('download', decodeURI(filename));
               a.append('自动下载');
               a.style = 'display:none';
               document.body.appendChild(a);
