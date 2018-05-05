@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title>选择</title>
+  <link rel="stylesheet" href="../lui.css"/>
+  <script src="../lui.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let data = {};
+      for (let i = 0; i < 60; i++) {
+        data['id' + i] = 'name' + i;
+      }
+
+      let check = new LuiCheck(
+          document.body,
+          true, data, ['id2']
+      );
+
+      let getButton = document.getElementById('getButton');
+      getButton.addEventListener('click', () => {
+        console.log(check.getCheck());
+      });
+    });
+  </script>
+</head>
+<body>
+<p>
+  <button id="getButton">获取选择</button>
+</p>
+</body>
+</html>

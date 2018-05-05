@@ -1,0 +1,48 @@
+.lui-check {
+  position: relative;
+  user-select: none;
+}
+
+.lui-check > header {
+  border: 1px solid #CCCCCC;
+  padding: 0.5rem;
+  min-height: 1.5rem;
+  overflow: auto;
+}
+
+.lui-check > ul, .lui-check > ul > li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lui-check > ul {
+  position: absolute;
+  width: 100%;
+  background-color: #EEEEEE;
+  visibility: hidden;
+  max-height: 9rem;
+  overflow: auto;
+}
+
+.lui-check:hover > ul {
+  visibility: visible;
+}
+
+.lui-check > ul > li {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #CCCCCC;
+  cursor: pointer;
+}
+
+.lui-check > ul > li:hover {
+  background-color: #E0E0E0;
+}
+
+.lui-check > ul > li:before {
+  content: "\2610";
+}
+
+.lui-check > ul > li.checked:before {
+  content: "\2611";
+}
