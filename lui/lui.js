@@ -12,17 +12,23 @@ class LuiCheck {
 
     let ui = document.createElement('div');
     let header = document.createElement('header');
+    let headerText = document.createElement('div');
+    let headerAside = document.createElement('aside');
+    let toolbar = document.createElement('div');
     let ul = document.createElement('ul');
 
     ui.setAttribute('class', 'lui-check');
+    header.append(headerText);
+    header.append(headerAside);
+    header.append();
     ui.append(header);
+    ui.append(toolbar);
     ui.append(ul);
 
-    let updateHeader = function () {
-      header.innerText = Object.values(checkedMap).toString();
-    };
-
     //生成选项
+    let updateHeader = function () {
+      headerText.innerText = Object.values(checkedMap).toString();
+    };
     for (let key in map) {
       let li = document.createElement('li');
       li.append(map[key]);
@@ -50,6 +56,36 @@ class LuiCheck {
         li.dispatchEvent(new Event('click'));
       }
     }
+
+    //生成工具
+    let lis = ul.children;
+    if(multiple) {
+      let buttonSelect = document.createElement('button');
+      buttonSelect.append('反选');
+      buttonSelect.addEventListener('click', () => {
+        for (let li of lis) {
+          li.dispatchEvent(new Event('click'));
+        }
+      });
+
+      toolbar.append(buttonSelect);
+    }
+    let inputSearch = document.createElement('input');
+    inputSearch.setAttribute('type', 'search');
+    inputSearch.setAttribute('placeholder', '输入关键词筛选');
+    inputSearch.addEventListener('input', () => {
+      let v = inputSearch.value;
+      for (let li of lis) {
+        if(v.length > 0 && !li.innerText.includes(v)) {
+          //隐藏
+          li.classList.add('hide');
+        } else {
+          //显示
+          li.classList.remove('hide');
+        }
+      }
+    });
+    toolbar.append(inputSearch);
 
     container.append(ui);
   }
