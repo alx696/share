@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+  <head>
+    <title>液晶显示器坏点亮点漏光测试</title>
+    <style>
+      html, body {
+        width: 100%;
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        display: flex;
+        cursor: none;
+      }
+      #tip {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        font-size: xx-large;
+      }
+      .hidden {
+        visibility: hidden;
+      }
+    </style>
+    <script>
+      let test = function(t) {
+        let step = 1;
+        let show = function() {
+          switch (step) {
+            case 1:
+              t.style = 'background-color: white;';
+              t.textContent = '如果屏幕上有点或线，说明屏幕存在坏点。';
+              break;
+            case 2:
+              t.style = 'background-color: red;';
+              t.textContent = '如果屏幕上有点或线，说明屏幕存在坏点。';
+              break;
+            case 3:
+              t.style = 'background-color: green;';
+              t.textContent = '如果屏幕上有点或线，说明屏幕存在坏点。';
+              break;
+            case 4:
+              t.style = 'background-color: blue;';
+              t.textContent = '如果屏幕上有点或线，说明屏幕存在坏点。';
+              break;
+            case 5:
+              t.style = 'background-color: black; color: white;';
+              t.textContent = '屏幕四周烟雾状白色越多，说明屏幕漏光越严重。';
+              break;
+            default:
+            t.style = 'background-color: white;';
+            t.textContent = '测试完毕(退出按Esc键,再次测试按F5键)';
+          }
+        };
+        show();
+
+        window.addEventListener('keydown', evt => {
+          console.debug(evt.key);
+
+          if(evt.key === ' ') {
+            if(t.textContent !== '') {
+              t.textContent = '';
+            } else {
+              step ++;
+              show();
+            }
+          }
+        });
+      };
+
+      window.addEventListener('DOMContentLoaded', () => {
+        let tip = document.getElementById('tip');
+
+        let beginListener = function(evt) {
+          console.debug(evt.key);
+          if(evt.key === 'Enter') {
+            document.body.webkitRequestFullScreen();
+            test(tip);
+
+            window.removeEventListener('keydown', beginListener);
+          }
+        };
+        window.addEventListener('keydown', beginListener);
+      });
+    </script>
+  </head>
+  <body>
+    <div id="tip">测试页面按空格键隐藏提示文字，再次按空格键切换到下个测试页面！按Enter键开始测试，按Esc键退出全屏。（鼠标光标在网页区域已被隐藏,移动鼠标到网页外即可显示.）</div>
+  </body>
+</html>
