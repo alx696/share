@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package auto.grpc.son;
+
+import "father.proto";
+
+service SonService {
+  rpc Insert (Info) returns (Info) {
+  }
+}
+
+message Info {
+  string id = 1; //auto set
+  string name = 2;
+  father.Info father = 3;
+}
