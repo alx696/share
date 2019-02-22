@@ -9,7 +9,7 @@ https://alx696.github.io/share
 ### IPFS JS示例
 https://alx696.github.io/share/ipfs.html
 
-官方网站 https://js.ipfs.io/zh-CN/
+官方网站 https://js.ipfs.io/zh-CN/ 此例做了一个简单的文件分享功能，可惜的是目前的启动节点无法更换，而已有节点被墙……
 
 ### WebAssembly(Golang) 计算文件SHA1
 https://alx696.github.io/share/sha1.html
