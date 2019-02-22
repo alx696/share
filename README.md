@@ -1,3 +1,8 @@
+## 小结
+https://github.com/alx696/share/wiki
+
+记录了各个语言,软件的一些基本常用的点.
+
 ## 网页
 https://alx696.github.io/share
 
