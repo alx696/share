@@ -141,51 +141,6 @@ const X = {
     s.bandwidthTotalOut = document.getElementById('bandwidthTotalOut');
     s.bandwidthTotalIn = document.getElementById('bandwidthTotalIn');
 
-    /*inputFile.addEventListener('change', () => {
-      let file = inputFile.files[0];
-      console.debug('上传文件:', file);
-      let reader = new FileReader();
-      reader.onload = evt => {
-        const path = `${file.name}`;
-        const content = ipfs.types.Buffer.from(evt.target.result);
-        ipfs.files.add(
-            [{path: path, content: content}],
-            {
-              wrapWithDirectory: true,
-              progress: (length) => {
-                console.debug('上传比例:', length / file.size);
-              }
-            })
-            .then((results) => {
-              console.debug('上传完毕:', results);
-              console.debug('包装哈希:', results[1].hash);
-            });
-      };
-      reader.readAsArrayBuffer(file);
-    });*/
-
-    /*inputHash.addEventListener('change', () => {
-      let ipfsPath = '/ipfs/' + inputHash.value;
-      console.debug('IPFS路径:', ipfsPath);
-      ipfs.files.ls(ipfsPath, {long: true})
-          .then(results => {
-            console.debug('IPFS路径中文件:', results);
-
-            let stream = ipfs.files.getReadableStream(results[0].hash);
-            stream.on('data', (file) => {
-              let buf = ipfs.types.Buffer.from(new Uint8Array());
-              console.debug('---文件:', file);
-              if (file.type !== 'dir') {
-                file.content.on('data', (data) => {
-                  buf = ipfs.types.Buffer.concat([buf, data]);
-                  console.debug('下载比例:', buf.length / file.size);
-                });
-                file.content.resume()
-              }
-            });
-          });
-    });*/
-
     ipfs.on('ready', () => {
       console.info('IPFS就绪');
 
