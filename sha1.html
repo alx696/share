@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>校验(获取)文件SHA1-使用Go WebAssembly在网页中无需上传</title>
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    article {
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    article > header {
+      font-size: 3rem;
+    }
+
+    article > section:nth-child(2) {
+      flex: 1;
+      border: 0.5rem dodgerblue dashed;
+      color: royalblue;
+      cursor: pointer;
+    }
+
+    #hashInput {
+      display: block;
+      box-sizing: border-box;
+      width: 100%;
+      padding: 1rem;
+      font-family: monospace;
+      font-size: 2rem;
+      text-align: center;
+      color: green;
+    }
+  </style>
+  <script src="wasm_exec.js"></script>
+  <script>
+    let wasmBytes;
+    let initWasm = (callback) => {
+      //加载,编译,执行wasm模块
+      const GO = new Go();
+      WebAssembly.instantiateStreaming(
+          fetch("sha1.wasm"),
+          GO.importObject
+      ).then((result) => {
+        //1.获取wasm内存缓冲
+        wasmBytes = new Uint8Array(result.instance.exports.mem.buffer);
+
+        GO.run(result.instance);
+
+        callback();
+      });
+    };
+
+    let hashInput;
+    let fileSha = (file, callback) => {
+      hashInput.value = '稍等,计算中';
+
+      let fileReader = new FileReader();
+      fileReader.onload = (evt) => {
+        let fileBytes = new Uint8Array(evt.target.result);
+
+        //3.在wasm中创建缓冲并获取指针
+        GOinitMem(fileBytes.length, (inputPointer) => {
+          console.debug('得到输入指针:', inputPointer);
+
+          //5.通过指针往wasm内存缓冲中写入文件数据
+          wasmBytes.set(fileBytes, inputPointer);
+
+          //6.让wasm从内存中读取文件数据,并返回处理后数据的输出指针及长度
+          GOfileSha1((hash) => {
+            console.debug('文件SHA1:', hash);
+            callback(hash);
+          });
+        });
+      };
+      fileReader.readAsArrayBuffer(file);
+    };
+    let showSha = (hash) => {
+      hashInput.value = hash;
+    };
+
+    let initJs = () => {
+      hashInput = document.getElementById('hashInput');
+      hashInput.addEventListener('click', () => {
+        hashInput.select();
+        document.execCommand('copy');
+      });
+
+      let uploadBox = document.getElementById('uploadBox');
+      uploadBox.addEventListener('click', () => {
+        let input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.addEventListener('change', evt => {
+          let file = evt.target.files[0];
+          console.debug('选择文件:', file);
+
+          fileSha(file, showSha);
+        });
+        input.click();
+      });
+
+      uploadBox.addEventListener('dragover', evt => {
+        evt.preventDefault(); //阻止浏览器打开文件
+        uploadBox.style.borderColor = 'green';
+      });
+      uploadBox.addEventListener('dragleave', () => {
+        uploadBox.style.borderColor = 'dodgerblue';
+      });
+      uploadBox.addEventListener('drop', evt => {
+        evt.preventDefault(); //阻止浏览器打开文件
+        uploadBox.style.borderColor = 'dodgerblue';
+
+        if (evt.dataTransfer.items) {
+          // Use DataTransferItemList interface to access the file(s)
+          for (let i = 0; i < evt.dataTransfer.items.length; i++) {
+            // If dropped items aren't files, reject them
+            if (evt.dataTransfer.items[i].kind === 'file') {
+              let file = evt.dataTransfer.items[i].getAsFile();
+              console.debug('dataTransfer.items文件:', file);
+              fileSha(file, showSha);
+              return;
+            }
+          }
+        } else {
+          // Use DataTransfer interface to access the file(s)
+          for (let i = 0; i < evt.dataTransfer.files.length; i++) {
+            let file = evt.dataTransfer.files[i];
+            console.debug('dataTransfer.files文件:', file);
+            fileSha(file, showSha);
+            return;
+          }
+        }
+      });
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initWasm(
+          initJs
+      );
+    });
+  </script>
+</head>
+<body>
+<article>
+  <header>校验(获取)文件SHA1</header>
+  <section id="uploadBox">
+    <p>点我选择文件</p>
+    <p><i>或</i></p>
+    <p>拖动文件到此处然后松开</p>
+  </section>
+  <section>
+    <p>
+      <input id="hashInput" readonly placeholder="SHA1">
+    </p>
+  </section>
+</article>
+</body>
+</html>
