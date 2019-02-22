@@ -92,7 +92,7 @@
           //5.通过指针往wasm内存缓冲中写入文件数据
           wasmBytes.set(fileBytes, inputPointer);
 
-          //6.让wasm从内存中读取文件数据,并返回处理后数据的输出指针及长度
+          //6.让wasm处理文件并返回结果
           GOfileSha1((hash) => {
             console.debug('文件SHA1:', hash);
             callback(hash);
