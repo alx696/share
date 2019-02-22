@@ -14,6 +14,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
 
     article {
@@ -43,6 +44,17 @@
       font-size: 2rem;
       text-align: center;
       color: green;
+    }
+
+    #loading {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: orange;
     }
   </style>
   <script src="wasm_exec.js"></script>
@@ -144,6 +156,8 @@
           }
         }
       });
+
+      document.getElementById('loading').remove();
     };
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -167,5 +181,7 @@
     </p>
   </section>
 </article>
+
+<div id="loading">墙外网速较慢,稍等... 加载个500多K的wasm文件</div>
 </body>
 </html>
