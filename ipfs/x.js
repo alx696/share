@@ -198,9 +198,16 @@ const X = {
 
       let inputE = document.querySelector('input[name="qm"]');
       inputE.addEventListener('input', () => {
-        if (inputE.value.length === 46) {
-          X.download(ipfs, inputE.value);
+        let qm = inputE.value;
+        if (qm.length > 46) {
+          qm = qm.substring(
+              qm.lastIndexOf('=') + 1
+          );
+        }
+
+        if (qm.length === 46) {
           inputE.value = '';
+          X.download(ipfs, qm);
         }
       });
     });
