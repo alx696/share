@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+  <title>火星文件</title>
+  <link rel="stylesheet" href="x.css">
+  <script src="https://cdn.jsdelivr.net/npm/ipfs/dist/index.min.js"></script>
+  <script src="x.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      X.init();
+    });
+  </script>
+</head>
+<body>
+
+<header>
+  <h1>网页里的P2P——保持网页开启，一起加速起飞！</h1>
+</header>
+
+<table class="info">
+  <tbody>
+  <tr>
+    <td data-id="version">版本：</td>
+    <td data-id="peers-count">节点：</td>
+  </tr>
+  <tr>
+    <td data-id="send">发送：</td>
+    <td data-id="receive">接收：</td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="main">
+  <div class="peers-list"></div>
+  <div class="wrap">
+    <ul class="share-list"></ul>
+    <div id="debug"></div>
+  </div>
+</div>
+
+<div class="download">
+  <input name="qm" placeholder="粘贴QM下载">
+</div>
+
+<footer>
+  <button class="share">分享文件</button>
+  <div class="progress"></div>
+</footer>
+
+</body>
+</html>
