@@ -20,3 +20,6 @@ https://alx696.github.io/share/sha1.html
 https://alx696.github.io/share/lcd-test.html
 
 测试红、绿、蓝、白、黑几种纯色，以检测液晶显示器是否存在亮点和坏点，顺便看看色彩是否纯正，有无色块色斑。
+
+## 软件
+* Chrome https://www.google.cn/intl/zh-CN/chrome/
